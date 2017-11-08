@@ -1,12 +1,10 @@
 #include <iostream>
 #include <cmath>
 
+double const ACCURACY = 1e-9;
+
 bool is_valid(int digit, int base) {
-    if (abs(digit) > base - 1) {
-        std::cerr << "Wrong digit '" << abs(digit) << "' for base" << base << "!\n";
-        return false;
-    }
-    return true;
+    return (abs(digit) <= (base - 1));
 }
 
 int main() {
@@ -16,7 +14,7 @@ int main() {
     // print program info
     std::cout << "----CONVERT NUMBERS TO DECIMAL----\n\n"
             "------------ATTENTION:------------\n"
-            "• base should be in [2;9)\n"
+            "• base should be in [2;9]\n"
             "• abs(number) should be <= 9.22e+9\n"
             "• accuracy = 1e-9\n"
             "----------------------------------\n\n";
@@ -26,6 +24,7 @@ int main() {
         std::cerr << "Wrong base!\n";
         return 1;
     }
+
     std::cout << "Enter number to convert: ";
     if (!(std::cin >> number) || abs(number) > 9.22e+9) {
         std::cerr << "Wrong number!\n";
@@ -35,28 +34,29 @@ int main() {
 
     // shift comma to the end of number (considering accuracy = 1e-9) and convert fractional part
     int shift = 0;
-    for (double power = 1.0 / b; number != floor(number); power /= b, ++shift) {
+    for (double power = 1.0 / b; abs(number - floor(number)) > ACCURACY; power /= b, ++shift) {
         number *= 10;
-        auto digit = int((long long) (number) % 10);
+        int digit = (long long) (number) % 10;
         if (!is_valid(digit, b)) {
+            std::cerr << "Wrong digit '" << abs(digit) << "' for base " << b << "!\n";
             return 3;
         }
         res10 += digit * power;
     }
     // unshift and cast to long long
-    auto entire_part = (long long) (number / pow(10, shift));
+    long long entire_part = (long long) (number / pow(10, shift));
     // convert entire part
     for (int power = 1; entire_part; power *= b, entire_part /= 10) {
-        auto digit = int(entire_part % 10);
+        int digit = int(entire_part % 10);
         if (!is_valid(digit, b)) {
+            std::cerr << "Wrong digit '" << abs(digit) << "' for base " << b << "!\n";
             return 3;
         }
         res10 += digit * power;
     }
-
     // output result
     std::cout << "--------------RESULT--------------\n"
-            "Converted to base10: " << res10 << "\n"
-            "----------------------------------\n";
+            "Converted to base 10: " << res10 << "\n"
+                      "----------------------------------\n";
     return 0;
 }
