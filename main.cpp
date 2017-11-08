@@ -47,9 +47,9 @@ int main() {
         }
         res10 += digit * power;
     }
-
+    // unshift and cast to long long
     auto entire_part = (long long) (number / pow(10, shift));
-
+    // convert entire part
     for (int power = 1; entire_part; power *= b, entire_part /= 10) {
         auto digit = int(entire_part % 10);
         if (!is_valid(digit, b)) {
