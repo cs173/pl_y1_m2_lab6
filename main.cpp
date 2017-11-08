@@ -4,9 +4,9 @@
 bool is_valid(int digit, int base) {
     if (abs(digit) > base - 1) {
         std::cerr << "Wrong digit '" << abs(digit) << "' for base" << base << "!\n";
-        return true;
+        return false;
     }
-    return false;
+    return true;
 }
 
 int main() {
@@ -27,11 +27,7 @@ int main() {
         return 1;
     }
     std::cout << "Enter number to convert: ";
-    if (!(std::cin >> number)) {
-        std::cerr << "Number is out of range!\n";
-        return 2;
-    }
-    if (abs(number) > 9.22e+9) {
+    if (!(std::cin >> number) || abs(number) > 9.22e+9) {
         std::cerr << "Wrong number!\n";
         return 2;
     }
@@ -59,7 +55,8 @@ int main() {
     }
 
     // output result
-    std::cout << "--------------RESULT--------------\nConverted to base10: " << res10 << "\n"
-            "----------------------------------";
+    std::cout << "--------------RESULT--------------\n"
+            "Converted to base10: " << res10 << "\n"
+            "----------------------------------\n";
     return 0;
 }
