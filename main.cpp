@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 
-bool is_invalid(int digit, int base) {
+bool is_valid(int digit, int base) {
     if (abs(digit) > base - 1) {
         std::cerr << "Wrong digit '" << abs(digit) << "' for base" << base << "!\n";
         return true;
@@ -37,17 +37,22 @@ int main() {
     }
     std::cout << "converting...\n\n";
 
-    // shift comma to the end of number (considering accuracy = 1e-9)
+    // shift comma to the end of number (considering accuracy = 1e-9) and convert fractional part
     int shift = 0;
     for (double power = 1.0 / b; number != floor(number); power /= b, ++shift) {
         number *= 10;
-        res10 += ((long long) (number) % 10) * power;
+        auto digit = int((long long) (number) % 10);
+        if (!is_valid(digit, b)) {
+            return 3;
+        }
+        res10 += digit * power;
     }
+
     auto entire_part = (long long) (number / pow(10, shift));
 
     for (int power = 1; entire_part; power *= b, entire_part /= 10) {
         auto digit = int(entire_part % 10);
-        if (is_invalid(digit, b)) {
+        if (!is_valid(digit, b)) {
             return 3;
         }
         res10 += digit * power;
