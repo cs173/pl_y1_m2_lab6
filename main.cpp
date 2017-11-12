@@ -11,6 +11,7 @@ int main() {
     unsigned int b;
     double number, res10 = 0;
 
+    std::cout << 6/3*2;
     // print program info
     std::cout << "----CONVERT NUMBERS TO DECIMAL----\n\n"
             "------------ATTENTION:------------\n"
