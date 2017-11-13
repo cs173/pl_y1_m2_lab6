@@ -35,25 +35,25 @@ int main() {
 
     // shift comma to the end of number (considering accuracy = 1e-9) and convert fractional part
     int shift = 0;
-    for (double power = 1.0 / b; abs(number - floor(number)) > ACCURACY; power /= b, ++shift) {
+    for (double factor = 1.0 / b; abs(number - floor(number)) > ACCURACY; factor /= b, ++shift) {
         number *= 10;
         int digit = (long long) (number) % 10;
         if (!is_valid(digit, b)) {
             std::cerr << "Wrong digit '" << abs(digit) << "' for base " << b << "!\n";
             return 3;
         }
-        res10 += digit * power;
+        res10 += digit * factor;
     }
     // unshift and cast to long long
     long long entire_part = (long long) (number / pow(10, shift));
     // convert entire part
-    for (int power = 1; entire_part; power *= b, entire_part /= 10) {
+    for (int factor = 1; entire_part; factor *= b, entire_part /= 10) {
         int digit = int(entire_part % 10);
         if (!is_valid(digit, b)) {
             std::cerr << "Wrong digit '" << abs(digit) << "' for base " << b << "!\n";
             return 3;
         }
-        res10 += digit * power;
+        res10 += digit * factor;
     }
     // output result
     std::cout << "--------------RESULT--------------\n"
